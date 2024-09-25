@@ -1,0 +1,48 @@
+//Inserting image into database by java-program
+package com.tap.blob;
+
+import java.io.FileInputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.util.Scanner;
+
+public class WriteImage 
+{
+	private static String url="jdbc:mysql://localhost:3306/company";
+	private static String username="root";
+	private static String password="root";
+	private static String query="update employee set e_photo=? where eid=?";
+	private static Connection con;
+	private static PreparedStatement pstmt;
+	static 
+	{
+		try
+		{
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		con = DriverManager.getConnection(url,username,password);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	public static void main(String[] args)
+	{
+		try
+		{
+		pstmt = con.prepareStatement(query);
+		System.out.print("Enter the employee id : ");
+		
+		pstmt.setInt(2, new Scanner(System.in).nextInt());
+		pstmt.setBinaryStream(1,new FileInputStream("D:\\Images\\TapImage.jpg"));
+		int x = pstmt.executeUpdate();
+		System.out.println(x+" rows updated");
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+}
